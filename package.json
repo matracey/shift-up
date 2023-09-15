@@ -1,32 +1,30 @@
 {
-  "name": "shift-up",
-  "version": "1.0.0",
-  "main": "app.js",
-  "license": "MIT",
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.2",
-    "commander": "^2.20.0",
-    "prompt": "^1.0.0",
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
-    "tough-cookie": "^3.0.1",
-    "tough-cookie-store": "0.0.6"
-  },
-  "bin": {
-    "shiftup": "./tsc-out/app.js"
-  },
-  "scripts": {
-    "build": "tsc",
-    "start": "ts-node app.ts"
-  },
-  "devDependencies": {
-    "@types/cheerio": "^0.22.7",
-    "@types/node": "^10.14.4",
-    "@types/request": "^2.47.0",
-    "@types/request-promise-native": "^1.0.14",
-    "@types/tough-cookie": "^2.3.3",
-    "ts-node": "^8.0.3",
-    "tslint": "^5.15.0",
-    "typescript": "^3.4.1"
-  }
+    "name": "shift-up",
+    "version": "1.0.0",
+    "module": "app.ts",
+    "type": "module",
+    "license": "MIT",
+    "dependencies": {
+        "cheerio": "^1.0.0-rc.2",
+        "commander": "^2.20.0",
+        "prompt": "^1.0.0",
+        "request": "^2.88.0",
+        "request-promise-native": "^1.0.7",
+        "tough-cookie": "^3.0.1",
+        "tough-cookie-store": "0.0.6"
+    },
+    "scripts": {
+        "build": "tsc",
+        "start": "bun app.ts"
+    },
+    "devDependencies": {
+        "@types/cheerio": "^0.22.7",
+        "@types/request": "^2.47.0",
+        "@types/request-promise-native": "^1.0.14",
+        "@types/tough-cookie": "^2.3.3",
+        "bun-types": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    }
 }

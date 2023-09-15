@@ -13,17 +13,21 @@ This command-line tool lets you redeem codes from the convenience of your comput
 ## Instructions
 
 1. install SHiFT-up
-    - `npm install`
-    - `npm run build`
-    - `npm link`
+
+   ```bash
+   bun install
+   bun run build
+   bun link
+   ```
+
 2. (first time only) enter your Gearbox SHiFT e-mail and password
-    - `shiftup login <email> <password>`
-    - your credentials are transmitted over a secure connection to Gearbox **only**
-    - an authentication cookie will be stored inside `secrets/<email>.json`
-       - this file contains your login session, do not share this file with anybody! 
-    - I will NEVER try to steal your credentials
+   - `shiftup login <email> <password>`
+   - your credentials are transmitted over a secure connection to Gearbox **only**
+   - an authentication cookie will be stored inside `secrets/<email>.json`
+     - this file contains your login session, do not share this file with anybody!
+   - I will NEVER try to steal your credentials
 3. Enter the code that you would like to redeem
-    - `shiftup redeem <email> <code>`
+   - `shiftup redeem <email> <code>`
 
 If all went well, you should see the words "Your code was successfully redeemed".
 
@@ -35,14 +39,17 @@ https://shift.gearboxsoftware.com/rewards
 ## Known issues
 
 Message:
- > To continue to redeem SHiFT codes, please launch a SHiFT-enabled title first!
+
+> To continue to redeem SHiFT codes, please launch a SHiFT-enabled title first!
 
 My best guess is that you reached some kind of hourly (daily?) limit. Come back later.
 
 Message:
+
 > 500 - ""
 
 or
+
 > StatusCodeError: 412 - "{}"
 
 You probably entered a bad code.
@@ -58,3 +65,5 @@ You probably entered a bad code.
 I don't work for Gearbox Software.
 
 © 2018 Gearbox Software, LLC. SHiFT is trademark of Gearbox Software, LLC.
+
+This project was created using `bun init` in bun v1.0.2. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
