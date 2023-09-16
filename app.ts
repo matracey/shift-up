@@ -56,3 +56,7 @@ commander.command('redeem <user> <code>').action(async (user, code) => {
 });
 
 commander.parse(process.argv);
+
+if (commander.args.length === 0) {
+    commander.help();
+}
