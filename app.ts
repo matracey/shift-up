@@ -25,7 +25,7 @@ let http = rp.defaults({
 const cookieMonster = new CookieMonster(cookieStore);
 const webClient = new WebClient(http, 'https://shift.gearboxsoftware.com');
 
-commander.version('1.0.0');
+commander.version('1.1.0');
 
 commander.command('login <user> <password>').action(async (user, password) => {
     await webClient.login(user, password);
