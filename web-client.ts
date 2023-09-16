@@ -8,7 +8,7 @@ const resources = {
     submitLoginForm: '/sessions',
     codeForm: '/code_redemptions/new',
     checkCode: '/entitlement_offer_codes', // ?code=<code>
-    submitCodeForm: '/code_redemptions'
+    submitCodeForm: '/code_redemptions',
 };
 Object.freeze(resources);
 
@@ -22,21 +22,19 @@ export class WebClient {
      */
     constructor(
         private http: RequestAPI<RequestPromise, RequestPromiseOptions, RequiredUriUrl>,
-        private baseUrl: string
-    ) {
-    }
+        private baseUrl: string,
+    ) {}
 
     /**
      * Gets a page and returns its CSRF token (A.K.A. authenticity token).
      * @param url the location of the page.
      */
-    async getToken(url: string): Promise<string> {
+    async getToken(url: string): Promise<string | undefined> {
         console.log('GET', url);
-        let $: CheerioStatic = await this.http
-            .get({
-                uri: url,
-                transform: body => cheerio.load(body)
-            });
+        let $: CheerioAPI = await this.http.get({
+            uri: url,
+            transform: (body) => cheerio.load(body),
+        });
 
         return $('meta[name=csrf-token]').attr('content');
     }
@@ -52,10 +50,10 @@ export class WebClient {
         return this.http.post({
             uri: this.baseUrl + resources.submitLoginForm,
             formData: {
-                'authenticity_token': token,
+                authenticity_token: token,
                 'user[email]': email,
-                'user[password]': password
-            }
+                'user[password]': password,
+            },
         });
     }
 
@@ -66,19 +64,19 @@ export class WebClient {
             uri: `${this.baseUrl}${resources.checkCode}?code=${code}`,
             headers: {
                 'x-csrf-token': token,
-                'x-requested-with': 'XMLHttpRequest'
+                'x-requested-with': 'XMLHttpRequest',
             },
-            transform: body => cheerio.load(body)
+            transform: (body) => cheerio.load(body),
         });
 
         if ($('form.new_archway_code_redemption').length === 0) {
             return Promise.reject($.root().text().trim());
         } else {
             return {
-                'authenticity_token': $('input[name=authenticity_token]').val(),
+                authenticity_token: $('input[name=authenticity_token]').val(),
                 'archway_code_redemption[code]': $('#archway_code_redemption_code').val(),
                 'archway_code_redemption[check]': $('#archway_code_redemption_check').val(),
-                'archway_code_redemption[service]': $('#archway_code_redemption_service').val()
+                'archway_code_redemption[service]': $('#archway_code_redemption_service').val(),
             };
         }
     }
@@ -89,12 +87,12 @@ export class WebClient {
             uri: this.baseUrl + resources.submitCodeForm,
             formData,
             resolveWithFullResponse: true,
-            followRedirect: false
+            followRedirect: false,
         });
         let redirectLocation = await this.checkRedemptionStatus(response);
         console.log('GET', this.baseUrl + redirectLocation);
         let body = await this.http.get({
-            uri: this.baseUrl + redirectLocation
+            uri: this.baseUrl + redirectLocation,
         });
 
         return this.getAlert(body);
@@ -116,7 +114,7 @@ export class WebClient {
         let nextResponse = await this.http.get({
             uri: this.baseUrl + url,
             resolveWithFullResponse: true,
-            followRedirect: false
+            followRedirect: false,
         });
 
         // retry recursively
@@ -124,7 +122,7 @@ export class WebClient {
     }
 
     private wait(ms: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
     private getAlert(body: any): string | null {
@@ -143,7 +141,7 @@ export class WebClient {
         }
         return {
             status: div.text().trim(),
-            url: div.data('url')
+            url: div.data('url'),
         };
     }
 }
