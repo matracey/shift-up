@@ -1,4 +1,4 @@
-import cheerio from 'cheerio';
+import { CheerioAPI, load } from 'cheerio';
 import { RequestAPI, RequiredUriUrl, Response } from 'request';
 import { RequestPromise, RequestPromiseOptions } from 'request-promise-native';
 import { ParseError } from './parse-error';
@@ -33,7 +33,7 @@ export class WebClient {
         console.log('GET', url);
         let $: CheerioAPI = await this.http.get({
             uri: url,
-            transform: (body) => cheerio.load(body),
+            transform: (body) => load(body),
         });
 
         return $('meta[name=csrf-token]').attr('content');
@@ -60,13 +60,13 @@ export class WebClient {
     async getRedemptionForm(code: string): Promise<any> {
         let token = await this.getToken(this.baseUrl + resources.codeForm);
         console.log('GET', `${this.baseUrl}${resources.checkCode}?code=${code}`);
-        let $: CheerioStatic = await this.http.get({
+        let $: CheerioAPI = await this.http.get({
             uri: `${this.baseUrl}${resources.checkCode}?code=${code}`,
             headers: {
                 'x-csrf-token': token,
                 'x-requested-with': 'XMLHttpRequest',
             },
-            transform: (body) => cheerio.load(body),
+            transform: (body) => load(body),
         });
 
         if ($('form.new_archway_code_redemption').length === 0) {
@@ -126,7 +126,7 @@ export class WebClient {
     }
 
     private getAlert(body: any): string | null {
-        const $ = cheerio.load(body);
+        const $ = load(body);
         if ($('div.notice').length === 0) {
             return null;
         }
@@ -134,14 +134,14 @@ export class WebClient {
     }
 
     private getStatus(body: any): { status: string; url: string } {
-        const $ = cheerio.load(body);
+        const $ = load(body);
         const div = $('div#check_redemption_status');
         if (div.length === 0) {
             throw new ParseError('Could not find div#check_redemption_status.');
         }
         return {
             status: div.text().trim(),
-            url: div.data('url'),
+            url: div.data('url') as string,
         };
     }
 }
